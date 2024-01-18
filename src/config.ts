@@ -16,16 +16,26 @@ import { argv } from "node:process";
  * ******************************************************
  */
 const wd = process.cwd();
-export const root = fileURLToPath(`file://${wd}`);
 export const cacheMap = new Map();
-export const nodeImportMapPath = join(root, "node.importmap");
-export const cache = join(root, ".cache");
-const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
-export const importmap = new ImportMap({ rootUrl: import.meta.url, map });
 
-export const options = parseArgs({
+// cli
+export const { importmapPath, cachePath, rootDir, debugNodeImportmapLoader } = parseArgs({
   args: argv.slice(2),
-  options: { debugNodeImportmapLoader: { alias: "d", type: "boolean", default: false } },
+  options: {
+    debugNodeImportmapLoader: { alias: "d", type: "boolean", default: false },
+    importmapPath: { alias: "i", type: "string", default: "importmap.json" },
+    cachePath: { alias: "c", type: "string", default: ".jspm-cache" },
+    rootDir: { alias: "r", type: "string", default: wd },
+  },
 });
 
-export const isDebuggingEnabled = Boolean(options.debugNodeImportmapLoader);
+// execution structure
+export const root = fileURLToPath(`file://${rootDir}`);
+export const nodeImportMapPath = join(root, importmapPath);
+export const cache = join(root, cachePath);
+const map = existsSync(nodeImportMapPath) ?
+  JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) :
+  {};
+
+export const importmap = new ImportMap({ rootUrl: import.meta.url, map });
+export const isDebuggingEnabled = Boolean(debugNodeImportmapLoader);
