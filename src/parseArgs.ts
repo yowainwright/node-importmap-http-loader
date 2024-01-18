@@ -1,7 +1,7 @@
 import { Options, ParsedArgs } from "./types";
 
 export const parseArgs = ({ args, options }: Options) =>
-  args.reduce((acc: ParsedArgs = {}, arg: string, index: number) => {
+  args.reduce((acc, arg: string, index: number) => {
     const property = Object.keys(options).find((option) => option === arg || options[option]?.alias === arg);
     if (!property) return acc;
     const propertyOptions = options[property];
@@ -13,4 +13,4 @@ export const parseArgs = ({ args, options }: Options) =>
       ...acc,
       [property]: value,
     };
-  }, {});
+  }, {} as ParsedArgs);

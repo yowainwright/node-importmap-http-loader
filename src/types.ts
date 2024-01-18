@@ -21,5 +21,8 @@ export type Options = {
 };
 
 export type ParsedArgs = {
-  [x: string]: string | boolean | OptionDefinition;
+  debugNodeImportmapLoader: boolean;
+  importmapPath: string;
+  cachePath: string;
+  rootDir: string;
 };
