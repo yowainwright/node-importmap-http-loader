@@ -33,7 +33,10 @@ export const { importmapPath, cachePath, rootDir, debugNodeImportmapLoader } = p
 export const root = fileURLToPath(`file://${rootDir}`);
 export const nodeImportMapPath = join(root, importmapPath);
 export const cache = join(root, cachePath);
-const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
+
+const map = existsSync(nodeImportMapPath) ?
+  JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) :
+  {};
 
 export const importmap = new ImportMap({ rootUrl: import.meta.url, map });
 export const isDebuggingEnabled = Boolean(debugNodeImportmapLoader);
